@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMDB search</title>
+</head>
+<body>
+    <div class="container">
+        <h1>OMDB MOVIE</h1>
+        <p> <strong>Cari berdasarkan imdb id</strong></p>
+        <input type="text" id="inputfilm"/>
+        <button onclick="InfoFilm()">
+            search
+        </button>
+        <h3 id="judulfilm"></h3>
+        <h3 id="tahunfilm"></h3>
+        <h3 id="Rating"></h3>
+
+
+
+        <script>
+        function InfoFilm(){
+            const apiKey = '8ef0da52';
+            const imdbid = document.getElementById(`inputfilm`).value;
+
+            const apiUrl = `https://www.omdbapi.com/?i=${imdbid}&apikey=${apiKey}`;
+            
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        const responseData = JSON.parse(this.responseText);
+                        const judul = responseData.Title;
+                        const tahun = responseData.Year;
+                        const imdbrate = responseData.imdbRating;
+                        judulfilm.innerHTML = `judul: ${judul} `;
+                        tahunfilm.innerHTML = `tahun: ${tahun}` ;
+                        Rating.innerHTML = `Rating:${imdbrate}` ;
+
+                    } else {
+                        console.error('Failed to fetch movie data. Status:', this.status);
+                    }
+                }
+            };
+
+            xhr.open("GET", apiUrl, true);
+            xhr.send();
+
+        }    
+        </script>
+
+
+    </div>
+    
+
+
+
+
+
+</body>

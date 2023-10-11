@@ -17,8 +17,8 @@
                 <div class="card-body w-full align-items-center d-flex justify-content-between">
                     <h4><i class="fa-3 fa-solid fa-pen"></i></h4>
                     <div class="col text-end">
-                        <p class="card-text">278</p>
-                        <p class="card-text">NEW POST</p>
+                        <p id="kotacuy" class="card-text"></p>
+                        <p id = "weatherData" class="card-text"></p>
                     </div>
                 </div>
             </div>
@@ -26,8 +26,8 @@
                 <div class="card-body w-full align-items-center d-flex justify-content-between">
                     <h4><i class="fa-3 fa-regular fa-comment"></i></h4>
                     <div class="col text-end">
-                        <p class="card-text">156</p>
-                        <p class="card-text">NEW COMMENT</p>
+                        <p id = "judulfilm1" class="card-text"></p>
+                        <p id = "ratingfilm1" class="card-text"></p>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                         <h4><i class="fa-3 fa-solid fa-triangle-exclamation"></i></h4>
                         <div class="col text-start">
                             <p class="card-text">278</p>
-                            <p class="card-text">DANGEROUS</p>
+                            <p class="card-text"></p>
                         </div>
                     </div>
                     <span class="placeholder col-10 bg-warning rounded-4 mt-3"></span>
@@ -167,7 +167,60 @@
 
 
 
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            //API key openweather
+            const apiKey1 = '6ce86cbe13cc1d338fca0ba46a28182c';
+            //Api key OMDB
+            const apiKey2 = '8ef0da52';
+            //API url  Openweather
+            const apiUrl1 = `https://api.openweathermap.org/data/2.5/weather?q=surabaya&lang=id&appid=${apiKey1}`;
+            //API url OMDB
+            const apiUrl2 = `https://www.omdbapi.com/?i=tt3896198&apikey=${apiKey2}`;
 
+            const xhr1 = new XMLHttpRequest();
+            const xhr2 = new XMLHttpRequest();
+
+            //Openweather
+            xhr1.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        const responseData = JSON.parse(this.responseText);
+                        const temperature = (responseData.main.temp / 10) + 3;
+                        const city = responseData.name;
+                        //const cuacades = responseData.weather[0].main;
+                        const weatherDataDiv = document.getElementById("weatherData");
+                        weatherDataDiv.innerHTML = ` ${temperature} °C `;
+                        kotacuy.innerHTML = `Suhu di : ${city}   `;
+                        //infocuaca.innerHTML = `cuaca hari ini : ${cuacades}`;
+                    } else {
+                        console.error('Failed to fetch weather data. Status:', this.status);
+                    }
+                }
+            };
+            //OMDB API
+            xhr2.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        const responseData = JSON.parse(this.responseText);
+                        const judul = responseData.Title;
+                        const imdbrating = responseData.imdbRating;
+                        //const judulDiv = document.getElementById("judulfilm");
+                        judulfilm1.innerHTML = `Judul: ${judul} `;
+                        ratingfilm1.innerHTML = `Rating: ${imdbrating}`;
+                    } else {
+                        console.error('Failed to fetch movie data. Status:', this.status);
+                    }
+                }
+            };
+
+            xhr1.open("GET", apiUrl1, true);
+            xhr1.send();
+
+            xhr2.open("GET", apiUrl2, true);
+            xhr2.send();
+        });
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
